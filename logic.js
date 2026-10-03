@@ -23,54 +23,41 @@ function click(row, column) {
     board[row][column] = players[activePlayer];
     renderBoard(board);
 
-    let isWin = checkWin(players[activePlayer]);
+    let isWin = checkWin(row, column);
     if(isWin) {
         showWinner(activePlayer);
         return;
     }
 
-    activePlayer = (activePlayer === 0) ? 1 : 0;
+    activePlayer = 1 - activePlayer;
 }
 
-function checkWin(symbol) {
+function checkWin(row, column) {
+    const symbol = players[activePlayer];
     return (
-        isRowWin(symbol) ||
-        isColumnWin(symbol) ||
+        isRowWin(row, symbol) ||
+        isColumnWin(column, symbol) ||
         isMainDiagonalWin(symbol) ||
         isSecondaryDiagonalWin(symbol)
     );
 }
 
-function isRowWin(symbol) {
+function isRowWin(row, symbol) {
     for (let i = 0; i < boardLength; i++) {
-        let isWin = true;
-        for (let j = 0; j < boardLength; j++) {
-            if(board[i][j] !== symbol) {
-                isWin = false;
-                break;
-            }
-        }
-        if (isWin) {
-            return true;
+        if(board[row][i] !== symbol) {
+            return false;
         }
     }
-    return false;
+    return true;
 }
 
-function isColumnWin(symbol) {
+function isColumnWin(column, symbol) {
     for (let i = 0; i < boardLength; i++) {
-        let isWin = true;
-        for (let j = 0; j < boardLength; j++) {
-            if(board[j][i] !== symbol) {
-                isWin = false;
-                break;
-            }
-        }
-        if(isWin) {
-            return true;
+        if(board[i][column] !== symbol) {
+            return false;
         }
     }
-    return false;
+    return true;
 }
 
 function isMainDiagonalWin(symbol) {
